@@ -7,11 +7,16 @@ import { type SkinAnalysis, skinAnalysisSchema } from "@shared/schema";
 //   - do not change this unless explicitly requested by the user
 
 // This API key is from Gemini Developer API Key, not vertex AI API Key
-if (!process.env.GEMINI_API_KEY) {
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+
+if (!GEMINI_API_KEY) {
   throw new Error("GEMINI_API_KEY environment variable is required");
 }
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 export async function analyzeSkinTone(imageBase64: string, mimeType: string): Promise<SkinAnalysis> {
   try {
