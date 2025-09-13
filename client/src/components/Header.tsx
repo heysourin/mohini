@@ -11,7 +11,7 @@ export default function Header() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground" data-testid="text-app-title">
-              SkinTone AI
+              Mohini AI
             </h1>
             <p className="text-xs text-muted-foreground hidden sm:block">
               Personalized Color Analysis
