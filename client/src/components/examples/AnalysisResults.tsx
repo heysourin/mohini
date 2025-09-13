@@ -1,8 +1,7 @@
 import AnalysisResults from '../AnalysisResults';
 import { type SkinAnalysis } from "@shared/schema";
 
-// todo: remove mock functionality
-const mockAnalysis: SkinAnalysis = {
+const sampleAnalysis: SkinAnalysis = {
   skinTone: "Medium with golden undertones",
   undertone: "warm",
   seasonalType: "autumn",
@@ -19,5 +18,5 @@ const mockAnalysis: SkinAnalysis = {
 };
 
 export default function AnalysisResultsExample() {
-  return <AnalysisResults analysis={mockAnalysis} />;
+  return <AnalysisResults analysis={sampleAnalysis} />;
 }

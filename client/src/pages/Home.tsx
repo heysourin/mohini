@@ -24,34 +24,32 @@ export default function Home() {
     setIsAnalyzing(true);
     console.log('Starting skin tone analysis...');
     
-    // todo: remove mock functionality - replace with actual API call
-    // Simulate analysis delay
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    // Mock analysis result
-    const mockAnalysis: SkinAnalysis = {
-      skinTone: "Medium with golden undertones",
-      undertone: "warm",
-      seasonalType: "autumn",
-      confidence: 0.92,
-      analysis: "Your skin has beautiful warm undertones with golden highlights. The medium depth of your skin tone pairs excellently with rich, earthy colors. Your warm undertones suggest you belong to the autumn color palette, which includes deep oranges, browns, and golden yellows. These colors will enhance your natural radiance and complement your skin's inherent warmth.",
-      colorRecommendations: [
-        { hex: "#8B4513", name: "Warm Brown", category: "makeup", description: "Perfect for bronzer and contouring to add warmth" },
-        { hex: "#CD853F", name: "Golden Bronze", category: "makeup", description: "Ideal for eyeshadow and highlights" },
-        { hex: "#D2B48C", name: "Tan", category: "makeup", description: "Great for foundation matching" },
-        { hex: "#F4A460", name: "Sandy Brown", category: "clothing", description: "Excellent for casual wear and earth tones" },
-        { hex: "#DEB887", name: "Burlywood", category: "clothing", description: "Perfect for professional attire" },
-        { hex: "#BC8F8F", name: "Rosy Brown", category: "clothing", description: "Soft and flattering for everyday wear" },
-        { hex: "#D2691E", name: "Chocolate", category: "hair", description: "Rich brown hair color option" },
-        { hex: "#8B7355", name: "Dark Khaki", category: "hair", description: "Natural looking brown with warmth" },
-        { hex: "#B8860B", name: "Dark Goldenrod", category: "accessories", description: "Excellent for jewelry and metallic accessories" },
-        { hex: "#DAA520", name: "Goldenrod", category: "accessories", description: "Perfect for handbags and scarves" },
-      ]
-    };
-    
-    setAnalysis(mockAnalysis);
-    setIsAnalyzing(false);
-    console.log('Analysis complete:', mockAnalysis);
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('photo', selectedFile);
+
+      // Call the real API
+      const response = await fetch('/api/analyze-skin', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Analysis failed');
+      }
+
+      const analysis: SkinAnalysis = await response.json();
+      setAnalysis(analysis);
+      console.log('Analysis complete:', analysis);
+    } catch (error) {
+      console.error('Error analyzing skin tone:', error);
+      // Show user-friendly error message
+      alert(`Analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleReset = () => {
